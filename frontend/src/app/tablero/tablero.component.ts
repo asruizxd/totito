@@ -11,10 +11,12 @@ import { CommonModule } from '@angular/common';
 })
 export class TableroComponent implements OnInit {
 
-  tablero: string[] = [];
+  estado: string = 'EN_CURSO';
+  tablero: string[] = ["-", "-", "-", "-", "-", "-", "-", "-", "-"];
   juegoId!: number;
+  ganador: string | null = null;
 
-  constructor(private juegoService: JuegoService) {}
+  constructor(private juegoService: JuegoService) { }
 
   ngOnInit(): void {
     this.iniciarJuego();
@@ -23,20 +25,36 @@ export class TableroComponent implements OnInit {
   iniciarJuego() {
     this.juegoService.crearJuego().subscribe(res => {
       this.juegoId = res.id;
-      this.tablero = res.tablero.split('');
+
+      setTimeout(() => {
+        if (res.tablero) {
+          this.tablero = res.tablero.split('');
+        }
+      });
     });
   }
 
   jugar(pos: number) {
 
-  console.log("CLICK en:", pos); // 👈 DEBUG
+    if (this.estado === 'FINALIZADO') {
+      console.log("El juego ya terminó");
+      return;
+    }
 
-  if (this.tablero[pos] !== '-') return;
+    if (this.tablero[pos] !== '-') return;
 
-  this.juegoService.jugar(this.juegoId, pos)
-    .subscribe((res: any) => {
-      console.log("RESPUESTA:", res); // 👈 DEBUG
-      this.tablero = res.tablero.split('');
-    });
-}
+    this.juegoService.jugar(this.juegoId, pos)
+      .subscribe({
+        next: (res: any) => {
+          this.tablero = res.tablero.split('');
+          this.estado = res.estado;
+        },
+        error: (err) => {
+          console.error("Error del backend:", err);
+
+          // Opcional: marcar como finalizado
+          this.estado = 'FINALIZADO';
+        }
+      });
+  }
 }

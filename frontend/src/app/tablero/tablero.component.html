@@ -2,16 +2,40 @@
 
   <h2>🎮 Totito</h2>
 
-  <div class="row justify-content-center">
+  <!-- TABLERO -->
+  <div class="row justify-content-center"
+       [class.disabled]="estado === 'FINALIZADO'">
+
     <div class="col-4 p-0"
          *ngFor="let celda of tablero; let i = index"
-         (click)="jugar(i)">
+         (click)="estado !== 'FINALIZADO' && jugar(i)">
 
       <div class="casilla">
         {{ celda === '-' ? '' : celda }}
       </div>
 
     </div>
+
+  </div>
+
+  <!-- MENSAJE DE RESULTADO -->
+  <div *ngIf="estado === 'FINALIZADO'" class="mt-4">
+
+    <h3 *ngIf="ganador">
+      🏆 Ganador: {{ ganador }}
+    </h3>
+
+    <h3 *ngIf="!ganador">
+      🤝 Empate
+    </h3>
+
+  </div>
+
+  <!-- BOTÓN NUEVO JUEGO -->
+  <div class="mt-3">
+    <button class="btn btn-primary" (click)="iniciarJuego()">
+      🔄 Nuevo Juego
+    </button>
   </div>
 
 </div>
