@@ -1,0 +1,9 @@
+.casilla {
+  height: 100px;
+  border: 2px solid black;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

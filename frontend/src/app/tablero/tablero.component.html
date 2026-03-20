@@ -1,0 +1,17 @@
+<div class="container text-center mt-5">
+
+  <h2>🎮 Totito</h2>
+
+  <div class="row justify-content-center">
+    <div class="col-4 p-0"
+         *ngFor="let celda of tablero; let i = index"
+         (click)="jugar(i)">
+
+      <div class="casilla">
+        {{ celda === '-' ? '' : celda }}
+      </div>
+
+    </div>
+  </div>
+
+</div>
